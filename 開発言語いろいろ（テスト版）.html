@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet" href="https://kannuki-san.github.io/Testhtml/css/sample.css">
+    <link rel="stylesheet" href="個々ページ用.css">
 
     <title>7グループ</title>
 
@@ -24,17 +22,9 @@
         <a class="toptitle">7グループ ゲーム関連の内容・プログラミング</a>
 
     </header>
-    <nav class="bar">
-            <ul>
-                <li class="curret"><a href="#">Home</a></li>
-                <li><a href=”#”>News</a></li>
-                <li><a href=”#”>About</a></li>
-                <li><a href=”#”>Access</a></li>
-                <li><a href=”#”>Blog</a></li>
-            </ul>
-        </nav>
+
     <article>
-        <h1>ゲーム開発に使われる開発言語いろいろ</h1>
+        <div class="box1"><p>ゲーム開発で使われる言語いろいろ</p></div>
 
     <main><!--目次的なところを作るときいらなければ削除-->
     <ol class="listA">
@@ -45,7 +35,7 @@
     </ol>
     <!--以下内容-->
     <section>
-        <h2 id="i1">アセンブリ言語</h2>
+        <h2 class="under" id="i1">アセンブリ言語</h2>
         <blockquote>
             <p>
                 <q>CPUの機械ごと一対一で対応するが、人間が理解しやすいよう、ニーモニックという単語で表現したもの。
@@ -56,16 +46,16 @@
         <p>90年代後半まで主に使用されてきた。
             ハードウェアの性能が現在ほど高くなく、開発規模も大きくなかった時代に、多く使用されてきた。</p>
 
-        <h2 id="i2">C/C++</h2>
+        <h2 class="under" id="i2">C/C++</h2>
         <p>90年代後半頃から使用されている。</p>
         <p>ハードウェア性能が向上しプログラム開発が大規模化していく中でアセンブラでは開発効率が悪いため、使用されようになった。</p>
         <p>ほぼ機械語であるアセンブリ言語がハードウェアの性能を目一杯引き出すことができるのに対し、高水準言語であるC言語は大規模な開発に向いている。</p>
 
-        <h2 id="i3">C# (Unityなど)</h2>
+        <h2 class="under" id="i3">C# (Unityなど)</h2>
         <p>ハードウェアの進化が更に進み、汎用のPCと同じようなアーキテクチャ。性能（更にパソコンで使用されるハードウェアをゲームに最適化したもの）が搭載され、ソフトウェアもパソコンに近い環境で開発することが可能となってきた。</p>
         <p>現在ではUnityなどを利用した汎用の開発環境に近いものが利用されている。</p>
 
-        <h2 id="i4">シェーダー言語</h2>
+        <h2 class="under" id="i4">シェーダー言語</h2>
         <p>3DCGの開発に利用される言語。DirectX、OpenGLなど。</p>
         <p>用途に合わせて複数の言語が開発されている。</p>
     </section>
