@@ -40,7 +40,7 @@ ul li {
 }
 
 .under {
-    max-width: auto;
+    display: inline-block;
     border-bottom: dashed 2px #90ce9c;
 }
 
