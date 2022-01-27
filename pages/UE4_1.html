@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+    
+    <head>
+        <meta charset="utf-8">
+        <title>個人のページ</title>
+        <link rel="stylesheet" href="../template/個々ページ用.css">
+    </head>
+    
+    <body>
+        
+    <div id="page">
+        
+        <div class="box1"><h1>タイトル。文字の長さに合わせて変形します。</h1></div>
+        <p>今回、UE4を使って3Dシューティングゲームを作っていきます。</p>
+        <ul>
+            <h2>目次</h2>
+            <li><a href="../pages/UE4.html">プロジェクトの作成</a></li>
+            <li>敵の作成</li>
+            <li><a href="../pages/UE4_2.html">システムの作成</a></li>
+        </ul>
+        
+        <h3>敵の作成</h3>
+        
+        <p>最初に<strong>敵の本体を作っていきます。</strong>下にある｢Contents｣で右クリックし、新しいフォルダを作ります。フォルダができたら右クリックし、｢Blueprint Class｣から｢Pawn｣を選択し、名前を｢BP_enemy｣に変更します。左上の｢Add Component｣から｢Sphere｣と｢Sphre Collision｣を追加します。コリジョンを調整し当たり判定をつけます。これで本体ができました。</p>
+        <p>続いて、敵が動けるようにしていきます。左上で｢NavMeshBoundsVolume｣を検索し追加します。これは動くことのできる範囲をしていするものなのでマップ全体が入るように調整します。Pボタンを押すと範囲が表示されるのでマップ全域に入っていたら大丈夫です。</p>
+        <p><strong>敵の動くための処理を作っていきます。</strong>先ほど作った｢BP enemy｣を開き、タブから｢Event Graph｣を選択します。ノードを以下のように配置していきます。</p>
+        <img src="../images/1.png"></img>
+            <ul>
+            <li>AI Move To:敵の動きの制御</li>
+            <li>GetActorLocation:プレイヤーに向かって動く処理</li>
+             </ul>
+        <p>これで、プレイヤーを追跡する敵ができました。続いて、プレイヤーに当たった時と打たれた時の処理を追加していきます。ノードを以下のように追加していきます。</p>
+        <img src="../images/4.png"></img>
+            <ul>
+                <li>Cast To Score:弾がオブジェクトに当たったときスコアを追加する。</li>
+            </ul>
+        <p>これで敵の処理はできました！</p>
+        <p>次:<a href="../pages/UE4_2.html">システムの作成</a>
+        
+    </div>
+        
+    </body>

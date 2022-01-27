@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="utf-8">
+    <title>個人のページ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css">
+    <link rel="stylesheet" href="../template/個々ページ用.css">
+</head>
+    
+    <body>
+        <div class="box1"><p>Unity シューティングゲーム</p></div>
+        <p>今回、Unityを使ってシューティングゲームを作って行きます。以下の手順で制作していきます！</p>
+        <ul>
+            <h2>目次</h2>
+            <li><a href="../pages/unity.html">プロジェクトの作成</a></li>
+            <li><a href="../pages/unity_1.html">主人公機の作成</a></li>
+            <li><a href="../pages/unity_2.html">隕石の作成</a></li>
+            <li>ゲームシステムの作成</li>
+        </ul>
+
+
+            <h3>ゲームシステムの作成</h3>
+            <p>弾と隕石に当たり判定をつけていきます。今回は<mark>UnityのPhysicsの機能</mark>を使っていきます。</p>
+            <p><strong>隕石にColliderコンポーネントをアタッチしていきます。</strong>プロジェクトビューのロケットのPrefabを選択し、インスペクタの｢AddComponent｣をクリックします。｢Pysics2D｣から｢Circle Collider2D｣を選択します。シーンビューのロケットのプレハブを選択すると緑の範囲が出てきます。これが当たり判定となります。</p>
+            <p>続いて、<strong>弾の方に｢Rigidbody2D｣をアタッチしていきます。</strong>隕石の時と同様に、プロジェクトビューの隕石のprefabを選択し、インスペクタの｢AddComponent｣をクリックします。｢Pysics2D｣から｢Rigidbody2D｣を選択します。｢Is Trigger｣にチェックを入れるとオブジェクトを貫通するようになるため入れます。また、｢IsKinematic｣にチェックを入れると、重力の影響を受けなくなるためこれも入れます。</p>
+            <p>当たり判定が出来たため、<strong>接触した時の処理をできるようにしていきます。</strong>今回は弾の方に接触したときの処理を追加していきます。</p>
+            <p>プロジェクトビューから｢BulletController｣を開いて、以下のプログラムに変更します。</p>
+            <pre><code>
+using UnityEngine;
+using System.Collections;
+
+public class BulletController : MonoBehaviour {
+	void Update () {
+		transform.Translate (0, 0.2f, 0);
+
+		if (transform.position.y > 5) {
+			Destroy (gameObject);
+		} //弾のy座標が5を超えたら破棄する
+	}
+
+	void OnTriggerEnter2D(Collider2D coll) {
+		Destroy (coll.gameObject);
+		Destroy (gameObject);
+	} //Collider2Dに当たった時、弾と隕石を破棄する
+}
+            </code></pre>
+            <p>これで、弾が隕石に衝突した瞬間に消えるようになります。</p>
+            <p>次に<strong>スコアとゲームオーバーの概念を追加します。</strong></p>
+            <p><mark>UnityのuGUIの機能</mark>を使っていきます。まず、スコアのテキストを作っていきます。ヒエラルキービューを右クリックし、｢Create｣→｢UI｣→｢Text｣を選択します。ヒエラルキービューに｢Canvas｣が生成されます。｢Canvas｣の中のTextの名前を｢Score｣に変更し、インスペクタの設定を以下のようにします。</p>
+            <table border="1">
+              <thead>
+               <tr>
+                <th>Anchors</th>
+                <th>Position</th>
+                <th>Font Size</th>
+                <th>Color</th>
+               <tr>
+               </thead>
+               <tbody>
+                <tr>
+                 <th>右上</th>
+                 <th>(-20,-30,0)</th>
+                 <th>18</th>
+                 <th>白</th>
+               </tbody>
+            </table>
+            <p>同じ手順でゲームオーバーのテキストを作っていきます。作成したテキストの名前を｢GameOver｣にし、インスペクタの設定を以下のようにします。</p>
+            <table border="1">
+             <thead>
+              <tr>
+               <th>Position</th>
+               <th>Widht/Height</th>
+               <th>Text</th>
+               <th>Font Size</th>
+               <th>Alignment</th>
+               <th>Color</th>
+              </tr>
+              <thead>
+              <tbody>
+               <tr>
+                <th>(0,0,0)</th>
+                <th>(160,50)</th>
+                <th>なし</th>
+                <th>32</th>
+                <th>中央</th>
+                <th>白</th>
+               </tr>
+              </tbody>
+             </table>
+            <p><strong>スコアを更新するプログラムをを作っていきます。</strong>プロジェクトビューで右クリックし、｢Create｣から｢C# Script｣を選択し。ファイル名を｢UIController｣に変更します。以下のプログラムに変更します。</p>
+            <pre><code>
+            using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
+public class UIController : MonoBehaviour {
+
+	int score = 0;
+	GameObject scoreText;
+
+	public void AddScore(){
+		this.score += 10;
+	}
+
+	void Start () {
+		this.scoreText = GameObject.Find ("Score");
+	}
+
+	void Update () {
+		scoreText.GetComponent<Text> ().text = "Score:" + score.ToString("D4");
+	}
+}
+            </code></pre>
+            <p>ヒエラルキービューの｢UIController｣をヒエラルキービューの｢Canvas｣にドラック＆ドロップします。スコアは表示されていますが更新されていないので、更新されるように｢BulletController｣を変更します。</p>
+            <pre><code>
+            using UnityEngine;
+using System.Collections;
+
+public class BulletController : MonoBehaviour {
+	void Update () {
+		transform.Translate (0, 0.2f, 0);
+
+		if (transform.position.y > 5) {
+			Destroy (gameObject);
+		} //弾のy座標が5を超えたら破棄する
+	}
+
+	void OnTriggerEnter2D(Collider2D coll) {
+		GameObject.Find ("Canvas").GetComponent<UIController> ().AddScore (); 
+        Destroy (coll.gameObject);
+		Destroy (gameObject);
+	} //Collider2Dに当たった時、スコアを更新し、弾と隕石を破棄する
+
+            </code></pre>
+            <p>これでスコアが更新されるようになります。</p>
+            <p>続いて、<strong>ゲームオーバーが表示されるようにします。</strong>画面にゲームオーバーの文字を表示するため、｢UIController｣を以下のように変更していきます。</p>
+            <pre><code>
+            using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
+public class UIController : MonoBehaviour {
+
+	int score = 0;
+	GameObject scoreText;
+	GameObject gameOverText;
+
+	public void GameOver(){
+		this.gameOverText.GetComponent<Text>().text = "GameOver";
+	}
+
+	public void AddScore(){
+		this.score += 10;
+	}
+
+	// Use this for initialization
+	void Start () {
+		this.scoreText = GameObject.Find ("Score");
+		this.gameOverText = GameObject.Find ("GameOver");
+	}
+
+	void Update () {
+		scoreText.GetComponent<Text> ().text = "Score:" + score.ToString("D4");
+	}
+}
+            </code></pre>
+            <p>画面下端に触れたときにゲームオーバーを表示するため、｢RockController｣を以下のように表示していきます。</p>
+            <pre><code>
+            using UnityEngine;
+using System.Collections;
+
+public class RockController : MonoBehaviour {
+
+float fallSpeed;
+float rotSpeed;
+
+void Start () {
+this.fallSpeed = 0.01f + 0.1f * Random.value; //隕石ごとに落下速度が変わる
+this.rotSpeed = 5f + 3f * Random.value;　//
+}
+
+void Update () {
+transform.Translate( 0, -fallSpeed, 0, Space.World); //
+transform.Rotate(0, 0, rotSpeed );　//回転させる
+
+if (transform.position.y < -5.5f) {
+GameObject.Find ("Canvas").GetComponent<UIController> ().GameOver ();
+Destroy (gameObject);
+} //yが-5.5になったらゲームオーバーを表示し、隕石を破棄する
+}
+}
+            </code></pre>
+            <p>これでスコアとゲームオーバーが表示されるようになりました。</p>
+            <p>最後に画面を華やかにするため、エフェクトなどをつけていきます。今回は、隕石が爆発するエフェクト、背景のスクロールを作っていきます。</p>
+            <p>最初に<strong>隕石にエフェクトをつけていきます。</strong>まず、Unityのツールバーの｢window｣から｢Asset Store｣を選択し、｢Toon Explosion VFX Texture Free｣をインポートします。そのままだと爆発エフェクトが繰り返し表示される設定になっているので、<strong>隕石と弾の衝突時に一度だけ表示する設定にします。</strong>プロジェクトビューから｢Asset→Textures→Sprites→toonExplotionFree→Example｣の中にある｢exampleExplosionEffect｣を選択し、インスペクタの｢Particle System｣の｢Looping｣のチェックを外します。</p>
+            <p>｢BulletController｣の中にある｢OnTriggerEnter2D｣に爆発エフェクトを生成する処理を追加します。</p>
+            <pre><code>
+using UnityEngine;
+using System.Collections;
+
+public class BulletController : MonoBehaviour {
+	void Update () {
+		transform.Translate (0, 0.2f, 0);
+
+		if (transform.position.y > 5) {
+			Destroy (gameObject);
+		} //弾のy座標が5を超えたら破棄する
+	}
+
+	void OnTriggerEnter2D(Collider2D coll) {
+    　　GameObject.Find ("Canvas").GetComponent<UIController> ().AddScore ();　//スコアを更新する
+		Instantiate (explosionPrefab, transform.position, Quaternion.identity); //爆発エフェクトを生成する
+        Destroy (coll.gameObject);
+		Destroy (gameObject);
+	} //Collider2Dに当たった時、スコアを更新してエフェクトを発生させ弾と隕石を破棄する
+
+            </code></pre>
+            <p>スクリプト内で宣言した変数に爆発エフェクトを代入します。プロジェクトビューの｢bullePrefab」を選択し、インスペクタの｢BulletController｣の中にある｢Explosion Prefab｣の欄にインポートした爆発エフェクトをドラック＆ドロップします。これで発生条件を満たしたときエフェクトが発生するようになります。</p>
+            <p> 次に、<strong>背景がスクロールするようにします。</strong></p>
+            <p>プロジェクトビューから｢background｣をシーンビューに配置し、インスペクタから｢position｣の値を(0,4.8,0)に設定します。また、背景が他のオブジェクトにかぶらないように｢Order in Layer｣を-1に設定します。</p>
+            <p>背景を動かせるようにプログラムをしていきます。プロジェクトビューを右クリックし、｢Create｣から｢C#Script｣を選択し、名前を｢BackgroundControlle｣にします。以下のようにプログラムを変更します。</p>
+            <pre><code>
+            using UnityEngine;
+using System.Collections;
+
+public class BackgroundController : MonoBehaviour {
+
+	void Update () {
+		transform.Translate (0, -0.03f, 0);　//y軸方向に-0.03づつ動かす
+		if (transform.position.y < -4.9f) {
+			transform.position = new Vector3 (0, 4.9f, 0);
+		} //y座標が-4.9になったなら、y座標を4.9にする
+	}
+}
+           </code></pre>
+           </p>これで背景が動くようになります。</p>
+           <p>これにて全ての作業が終わりです。お疲れさまでした！</p>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+            <script>hljs.initHighlightingOnLoad(); //ハイライトを表示</script> 
+         </body>
