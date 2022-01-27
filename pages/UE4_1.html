@@ -25,13 +25,13 @@
         <p>最初に<strong>敵の本体を作っていきます。</strong>下にある｢Contents｣で右クリックし、新しいフォルダを作ります。フォルダができたら右クリックし、｢Blueprint Class｣から｢Pawn｣を選択し、名前を｢BP_enemy｣に変更します。左上の｢Add Component｣から｢Sphere｣と｢Sphre Collision｣を追加します。コリジョンを調整し当たり判定をつけます。これで本体ができました。</p>
         <p>続いて、敵が動けるようにしていきます。左上で｢NavMeshBoundsVolume｣を検索し追加します。これは動くことのできる範囲をしていするものなのでマップ全体が入るように調整します。Pボタンを押すと範囲が表示されるのでマップ全域に入っていたら大丈夫です。</p>
         <p><strong>敵の動くための処理を作っていきます。</strong>先ほど作った｢BP enemy｣を開き、タブから｢Event Graph｣を選択します。ノードを以下のように配置していきます。</p>
-        <img src="./images/1.png"></img>
+        <img src="../images/1.png"></img>
             <ul>
             <li>AI Move To:敵の動きの制御</li>
             <li>GetActorLocation:プレイヤーに向かって動く処理</li>
              </ul>
         <p>これで、プレイヤーを追跡する敵ができました。続いて、プレイヤーに当たった時と打たれた時の処理を追加していきます。ノードを以下のように追加していきます。</p>
-        <img src="./images/4.png"></img>
+        <img src="../images/4.png"></img>
             <ul>
                 <li>Cast To Score:弾がオブジェクトに当たったときスコアを追加する。</li>
             </ul>
