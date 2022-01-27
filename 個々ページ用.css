@@ -1,12 +1,19 @@
+#page {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
 body {
     background-color: #fffff9
 }
 
 .box1{
+    margin: 10px;
+    display: inline-block;
     position: relative;
-    background: #fff0cd;
-    box-shadow: 0px 0px 0px 5px #fff0cd;
-    border: dashed 2px white;
+    background: #E6E6FF;
+    box-shadow: 0px 0px 0px 5px #E6E6FF;
+    border: dashed 2px #9999FF;
     padding: 0.2em 0.5em;
     color: #454545;
 }
@@ -18,7 +25,7 @@ body {
     top: -7px;
     border-width: 0 20px 20px 0;
     border-style: solid;
-    border-color: #ffdb88 #fffff9 #ffdb88;
+    border-color: #CCCCFF #fffff9 #CCCCFF;
     box-shadow: -1px 1px 1px rgba(0, 0, 0, 0.15);
 }
 
@@ -32,6 +39,7 @@ ul {
     padding: 0.5em 0.5em 0.5em 2em;
     border: solid 3px #d4ecee;
     margin: 30px 90px 30px 30px;
+    max-width: 500px;
 }
 
 ul li {
@@ -39,9 +47,9 @@ ul li {
     padding: 0.5em 0;
 }
 
-.under {
+h3 {
     display: inline-block;
-    border-bottom: dashed 2px #90ce9c;
+    border-bottom: dashed 3px #90ce9c;
 }
 
 .mark {
