@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+    
+    <head>
+        <meta charset="utf-8">
+        <title>個人のページ</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css">
+        <link rel="stylesheet" href="個々ページ用.css">
+    </head>
+    
+    <body>
+        <div class="box1"><p></p></div>
+        <p>今回、Unityを使ってシューティングゲームを作って行きます。以下の手順で制作していきます！</p>
+        <ul>
+            <h2>目次</h2>
+            <li><a href="">プロジェクトの作成</a></li>
+            <li>ロケットの作成</li>
+            <li><a href="">隕石の作成</a></li>
+            <li><a href="">ゲームシステムの作成</a></li>
+        </ul>
+        
+
+        <h3>ロケットの作成</h3>
+        <p>プレイヤーが動かすロケットを作成していきます。プロジェクトビューからロケットの画像をシーンビューにドラック&ドロップします。こうすることにより画面上にロケットの画像が表示されるようになります。</p>
+        <p><strong>ロケットを動かせるようにスクリプトを作っていきます。</strong>プロジェクトビューの空白の部分を右クリックし、｢Create｣から｢C# Script｣を選択し、名前を｢RocketController.cs｣に変更します。作成したファイルをダブルクリックで開き以下のプログラムを入力します。</p>
+        <pre><code>
+using UnityEngine;
+using System.Collections;
+
+public class RocketController : MonoBehaviour {
+	void Update () {
+		if (Input.GetKey (KeyCode.LeftArrow)) {
+			transform.Translate (-0.1f, 0, 0);
+		} //左矢印キーを押してる間、フレーム毎にx軸方向に-0.1動かす
+		if (Input.GetKey (KeyCode.RightArrow)) {
+			transform.Translate ( 0.1f, 0, 0);
+		} //右矢印キーを押してる間、フレーム毎にx軸方向に0.1動かす
+	}
+}
+
+        </code></pre>
+        <p>ファイルを保存したら、ヒストリービューのロケットにドラッグ&ドロップします。(このことを<mark>アタッチ</mark>といいます。)</p>
+        <p>続いて、<strong>ロケットから球が発射されるようにします。</strong>基本的な流れはロケットの時と同様で、プロジェクトビューから弾の画像をシーンビューにドラック&ドロップします。その後、プロジェクトビューの空白を右クリックし、｢Create｣から｢C# Script｣を選択し、名前を｢BalletController.cs｣に変更します。以下のプログラムを入力します。</p>
+        <pre><code>
+using UnityEngine;
+using System.Collections;
+
+public class BulletController : MonoBehaviour {
+	void Update () {
+		transform.Translate (0, 0.2f, 0);　//フレーム毎にy軸方向に0.2動かす
+
+		if (transform.position.y > 5) {
+			Destroy (gameObject);
+		} //弾のy座標が5を超えたら破棄する
+	}
+}
+        </code></pre>
+        <p>ファイルを保存したら、ロケットの時と同じようにドラッグ&ドロップします。これで弾はできましたが、このままだと一回限りで消えてしまうため複製したものを射出できるようにします。</p>
+        <p><strong>特定のキーを押したら複製された弾をロケットから射出されるようにします</strong></p>
+        <p>複製するためにはprefabというものが必要なので作成します。ヒエラルキービューの｢ballet｣を選択し、プロジェクトビューへドラック&ドロップします。名前を｢bulletPrefab｣に変更します。prefabが作成出来たら元のbulletは削除します。ヒエラルキービューの｢bulletPrefab｣を右クリックし、｢Deleat｣を選択します。</p>
+        <p>以前作成した｢RocketContoller.cs｣を開き、以下のようにプログラムを変更します。
+        <pre><code>
+using UnityEngine;
+using System.Collections;
+
+public class RocketController : MonoBehaviour {
+
+	public GameObject bulletPrefab;
+
+	void Update () {
+		if (Input.GetKey (KeyCode.LeftArrow)) {
+			transform.Translate (-0.1f, 0, 0);
+		} //左矢印キーを押してる間、フレーム毎にx軸方向に-0.1動かす
+		if (Input.GetKey (KeyCode.RightArrow)) {
+			transform.Translate ( 0.1f, 0, 0);
+		} //右矢印キーを押してる間、フレーム毎にx軸方向に0.1動かす
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			Instantiate (bulletPrefab, transform.position, Quaternion.identity);
+		} //スペースが押されたとき、弾のインスタンスを自分の位置に出現させる
+	}
+}
+        </code></pre>
+        <p>変更出来たら、ロケットに弾のインスタンスを紐づけします。ヒエラルキービューから｢rocket｣を選択し、インスペクタから「RocketControllerスクリプト」の項目を探し、「bullet Prefab」の欄に、プロジェクトビューから「bulletPrefab」をドラッグ＆ドロップします。</p>
+        <p> 最後に<strong>弾が尾を引くようにエフェクトをつけていきます。</strong></p>
+        <p>今回<mark>｢Trail Renderer｣</mark>を使用します。プロジェクトビューの空白部分を右クリックし、｢Material｣を選択、名前を｢Trail_mat｣に変更して保存します。保存した｢trail_mat｣を選択した状態でインスペクタのシェーダーを｢Particle/Additive(soft)｣に変更します、｢Texture｣の欄にプロジェクトビューの｢trail｣をセットします。</p>
+        <p>続いて、<strong>弾に｢Trail Renderコンポネート｣をアタッチします。</strong>プロジェクトビューの｢bulletPrefab｣を選択し、インスペクタから｢Add Component｣→｢Effects｣→｢Trail Renderer｣を選択します。｢Trail Renderコンポネート｣の｢Materials/Element0｣の欄に｢trail_mat｣をドラック&ドロップし、｢Time｣を0.3、｢Start Width｣を0.2、｢End Width｣を0.1に変更します。動かしてみると弾が尾を引くようになっています。</p>
+        <p><strong>これでロケットは完成です！</strong>
+        <p>次:<a href="">隕石の作成</a></p>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+        <script> hljs.initHighlightingOnLoad(); //ハイライトを表示</script>
+    </body>
